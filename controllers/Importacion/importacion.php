@@ -106,6 +106,31 @@ if (isset($_POST["import"])) {
           $consulta->execute($parametros);
         }
 
+        /////////////////////////////////////
+        //Comprobar si existen datos del estudio y año del qual se quiere actualizar datos
+        //si existen datos primero se eliminan los datos relacionados y despues se insertan los correctos
+        //////////////////////////////////////
+        $consultaSiTablaExiste = $conexion->prepare('SELECT * FROM grupo_has_asignaturas WHERE estudio_id = :id 
+                                                                AND anio_inicio =:anio');
+        $paramExiste = [
+            'id' => $idPlan[1],
+            'anio' => $anioAcademico[0],
+        ];
+        $consultaSiTablaExiste->execute($paramExiste);
+        $consultaSiTablaExiste = $consultaSiTablaExiste->fetchAll(PDO::FETCH_ASSOC);
+        if(!empty($consultaSiTablaExiste)){
+            var_dump("holii");
+            $elimTabla = $conexion->prepare('DELETE FROM grupo_has_asignaturas WHERE estudio_id = :id
+                                                        AND anio_inicio =:anio');
+            $paramExiste = [
+                'id' => $idPlan[1],
+                'anio' => $anioAcademico[0],
+            ];
+            $elimTabla->execute($paramExiste);
+            $elimTabla = $elimTabla->fetchAll(PDO::FETCH_ASSOC);
+        }
+        /////////////////////////////////////
+        ///
         for($i=6; $i<sizeof($spreadSheetAry)-1; $i++){
           // Comprobación de si existe la asignatura
           $consultaExiste = $conexion->prepare('SELECT idAsignaturas FROM Asignaturas WHERE idAsignaturas = :id');
