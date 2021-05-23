@@ -119,7 +119,7 @@ if (isset($_POST["import"])) {
         $consultaSiTablaExiste->execute($paramExiste);
         $consultaSiTablaExiste = $consultaSiTablaExiste->fetchAll(PDO::FETCH_ASSOC);
         if(!empty($consultaSiTablaExiste)){
-            var_dump("holii");
+            var_dump("archivo excel repetido, primero se borra y se vuelve a escribir");
             $elimTabla = $conexion->prepare('DELETE FROM grupo_has_asignaturas WHERE estudio_id = :id
                                                         AND anio_inicio =:anio');
             $paramExiste = [
