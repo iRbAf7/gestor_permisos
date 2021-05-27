@@ -4,13 +4,9 @@ include_once 'config.php';
 if(!empty($_POST["id_asignatura"]))
 {
 
-  $sql = 'SELECT *
-    FROM grupo AS g
-    INNER JOIN grupo_has_asignaturas AS ga
-    ON g.idGrupo = ga.Grupo_idGrupo
-    INNER JOIN asignaturas AS a
-    ON a.idAsignaturas = ga.Asignaturas_idAsignaturas
-    WHERE a.idAsignaturas = '.$_POST["id_asignatura"];
+  $sql = 'SELECT DISTINCT Grupo_idGrupo, anio_inicio
+From grupo_has_asignaturas
+WHERE Asignaturas_idAsignaturas ='.$_POST["id_asignatura"];
 
   $consulta_grupos = $link->query($sql);
 
@@ -27,11 +23,11 @@ if(!empty($_POST["id_asignatura"]))
   while($grupo= $consulta_grupos->fetch_object())
   {
     echo '<tr>';
-    echo '<td style="text-align: center;">'.$grupo->idGrupo.'</td>';
-    echo '<td style="text-align: center;">'.$grupo->Anio_inicio.'</td>'; 
+    echo '<td style="text-align: center;">'.$grupo->Grupo_idGrupo.'</td>';
+    echo '<td style="text-align: center;">'.$grupo->anio_inicio.'</td>';
     ?>
     <td style="width: 10%; text-align: center">
-      <a href="#" class="btn btn-danger btn-circle" id="delGrupo" onclick="eliminarGrupo(<?php echo $_POST['id_asignatura'].', '.$grupo->idGrupo.', '.$grupo->Anio_inicio;?>)">
+      <a href="#" class="btn btn-danger btn-circle" id="delGrupo" onclick="eliminarGrupo(<?php echo $_POST['id_asignatura'].', '.$grupo->Grupo_idGrupo.', '.$grupo->anio_inicio;?>)">
         <i class="fas fa-trash" aria-hidden="true"></i>
       </a>
     </td>
